@@ -8,17 +8,11 @@ template_inputs:
   description: Search query to filter subscription entitlements. E.g. `quantity >
     0` to exclude subscriptions with unlimited entitlements. Keep unset for all subscriptions.
   advanced: false
-- name: Output format
-  required: true
-  input_type: user
-  description: Format of the generated report (CSV or YAML)
-  options: "csv\r\nyaml"
-  advanced: false
 model: ReportTemplate
 require:
 - plugin: katello
 ￼ version: 3.9.0
-%>
+-%>
 <%- load_pools(search: input('Subscriptions filter'), includes: [:subscription, :products]).each_record do |pool| -%>
 <%-   report_row(
         'ID': pool.id,
@@ -29,4 +23,4 @@ require:
         'Contract number': pool.contract_number,
       ) -%>
 <%- end -%>
-<%= report_render format: input('Output format').to_sym -%>
+<%= report_render -%>
