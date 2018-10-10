@@ -14,18 +14,12 @@ template_inputs:
   description: Limit the report only on errata found by this search query. Keep empty
     for report on all available errata.
   advanced: false
-- name: Output format
-  required: true
-  input_type: user
-  description: Format of the generated report (csv or yaml)
-  options: "csv\r\nyaml"
-  advanced: false
 model: ReportTemplate
 require:
 - plugin: katello
   version: 3.9.0
-%>
-<%- load_hosts(search: input('Hosts filter'), includes: [:operatingsystem,:applicable_errata,:lifecycle_environment]).each_record do |host| -%>
+-%>
+<%- load_hosts(search: input('Hosts filter'), includes: [:operatingsystem, :applicable_errata, :lifecycle_environment]).each_record do |host| -%>
 <%-   host_applicable_errata_filtered(host, input('Errata filter')).each do |erratum| -%>
 <%-     report_row(
           'Host': host.name,
@@ -42,4 +36,4 @@ require:
         ) -%>
 <%-   end -%>
 <%- end -%>
-<%= report_render format: input('Output format').to_sym -%>
+<%= report_render -%>
