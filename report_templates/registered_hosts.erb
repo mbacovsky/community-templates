@@ -8,17 +8,11 @@ template_inputs:
   description: Limit the report only on hosts found by this search query. Keep empty
     for report on all available hosts.
   advanced: false
-- name: Output format
-  required: true
-  input_type: user
-  description: Format of the generated report (csv or yaml)
-  options: "csv\r\nyaml"
-  advanced: false
 model: ReportTemplate
 require:
 - plugin: katello
 ￼ version: 3.9.0
-%>
+-%>
 <%- load_hosts(search: input('Hosts filter'), includes: [:operatingsystem,:subscriptions,:fact_values,:fact_names,:applicable_errata,:applicable_rpms]).each_record do |host| -%>
 <%-   report_row(
         'Name': host.name,
@@ -31,4 +25,4 @@ require:
         'Latest kernel available': host_latest_applicable_rpm_version(host, 'kernel')
       ) -%>
 <%- end -%>
-<%= report_render format: input('Output format').to_sym -%>
+<%= report_render -%>
